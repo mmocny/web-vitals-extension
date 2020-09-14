@@ -1,5 +1,5 @@
 {
-  "name": "web-vitals-extension",
+  "name": "web-vitals-extension-experimental",
   "version": "0.3.0",
   "description": "Instant Web Vitals metrics",
   "main": "src/browser_action/vitals.js",

@@ -14,6 +14,9 @@
 (async () => {
   const src = chrome.runtime.getURL('node_modules/web-vitals/dist/web-vitals.es5.min.js');
   const webVitals = await import(src);
+  const lsnSrc = chrome.runtime.getURL('node_modules/layout-shift-normalization/dist/layout-shift-normalization.es5.min.js');
+  const lsn = await import(lsnSrc);
+  console.log(lsn);
   let overlayClosedForSession = false;
   let latestCLS = {};
 
