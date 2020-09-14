@@ -45,6 +45,11 @@
       final: false,
       pass: true,
     },
+    eCls: {
+      value: 0,
+      final: false,
+      pass: true,
+    }
   };
 
   /**
@@ -221,6 +226,11 @@
     webVitals.getFID((metric) => {
       broadcastMetricsUpdates('fid', metric);
     }, true);
+
+    broadcastMetricsUpdates('eCls', {
+      value: 0.123,
+      isFinal: false,
+    });
   }
 
   /**

@@ -133,6 +133,17 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
         </div>
       </div>
     </div>
+    <div class="lh-audit-group__header"><span class="lh-audit-group__title">Experimental Metrics</span></div>
+    <div class="lh-columns">
+      <div class="lh-column">
+        <div class="lh-metric lh-metric--${metrics.eCls.pass ? 'pass':'fail'}">
+          <div class="lh-metric__innerwrap">
+            <span class="lh-metric__title">Experimental Cumulative Layout Shift <span class="lh-metric-state">${metrics.eCls.final ? '' : '(might change)'}</span></span>
+            <div class="lh-metric__value">${metrics.eCls.value.toFixed(3)}&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="lh-metrics-final lh-metrics__disclaimer" hidden>
     <div><span>${metrics.location.url} - ${metrics.timestamp}</span></div>

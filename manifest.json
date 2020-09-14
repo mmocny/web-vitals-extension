@@ -1,5 +1,5 @@
 {
-  "name": "Web Vitals",
+  "name": "Experimental Web Vitals",
   "version": "0.3.0",
   "manifest_version": 2,
   "description": "Measure metrics for a healthy site",
