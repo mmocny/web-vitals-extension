@@ -101,7 +101,7 @@ function createPSITemplate(result) {
  */
 function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
   if (metrics === undefined) { return ``; }
-  return `
+  let html = `
   <div class="lh-topbar">
     <a href="${metrics.location.url}" class="lh-topbar__url" target="_blank" rel="noopener" title="${metrics.location.url}">
   ${metrics.location.shortURL}</a>&nbsp;- ${metrics.timestamp}
@@ -133,18 +133,24 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
         </div>
       </div>
     </div>
-    <div class="lh-audit-group__header"><span class="lh-audit-group__title">Experimental Metrics</span></div>
-    <div class="lh-columns">
-      <div class="lh-column">
-        <div class="lh-metric lh-metric--${metrics.eCls.pass ? 'pass':'fail'}">
-          <div class="lh-metric__innerwrap">
-            <span class="lh-metric__title">Experimental Cumulative Layout Shift <span class="lh-metric-state">${metrics.eCls.final ? '' : '(might change)'}</span></span>
-            <div class="lh-metric__value">${metrics.eCls.value.toFixed(3)}&nbsp;</div>
+    <div class="lh-audit-group__header"><span class="lh-audit-group__title">Experimental Metrics</span></div>`;
+
+  for (const [name, metric] of Object.entries(metrics)) {
+    if (!name.startsWith('els')) continue;
+    for (const [elsStrategy, data] of Object.entries(metric.value)) {
+      html += `<div class="lh-columns">
+          <div class="lh-column">
+            <div class="lh-metric lh-metric--${data.pass ? 'pass':'fail'}">
+              <div class="lh-metric__innerwrap">
+                <span class="lh-metric__title">${elsStrategy}<span class="lh-metric-state">${metric.final ? '' : '(might change)'}</span></span>
+                <div class="lh-metric__value">${data.value.toFixed(3)}&nbsp;</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </div>`
+    }
+  }
+  html += `</div>
   <div class="lh-metrics-final lh-metrics__disclaimer" hidden>
     <div><span>${metrics.location.url} - ${metrics.timestamp}</span></div>
   </div>
@@ -155,6 +161,7 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
     </div>
   </div>
   `;
+  return html;
 }
 
 /**

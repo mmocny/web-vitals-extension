@@ -14,8 +14,6 @@
 (async () => {
   const src = chrome.runtime.getURL('node_modules/web-vitals/dist/web-vitals.es5.min.js');
   const webVitals = await import(src);
-  const lsnSrc = chrome.runtime.getURL('node_modules/layout-shift-normalization/dist/layout-shift-normalization.es5.min.js');
-  const lsn = await import(lsnSrc);
   let overlayClosedForSession = false;
   let latestCLS = {};
 
@@ -28,27 +26,20 @@
   const DEBOUNCE_DELAY = 500;
 
   // Registry for badge metrics
-  badgeMetrics = {
-    lcp: {
-      value: 0,
-      final: false,
-      pass: true,
-    },
-    cls: {
-      value: 0,
-      final: false,
-      pass: true,
-    },
-    fid: {
-      value: 0,
-      final: false,
-      pass: true,
-    },
-    eCls: {
-      value: 0,
-      final: false,
-      pass: true,
+  function mkBadge(name) {
+    return {
+      [name]: {
+        value: 0,
+        final: false,
+        pass: true,
+      }
     }
+  };
+  badgeMetrics = {
+    ...mkBadge('lcp'),
+    ...mkBadge('cls'),
+    ...mkBadge('fid'),
+    ...mkBadge('els'),
   };
 
   /**
@@ -226,7 +217,7 @@
       broadcastMetricsUpdates('fid', metric);
     }, true);
     webVitals.getELS((metric) => {
-      broadcastMetricsUpdates('eCls', metric);
+      broadcastMetricsUpdates('els', metric);
     }, true);
   }
 
