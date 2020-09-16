@@ -16,7 +16,6 @@
   const webVitals = await import(src);
   const lsnSrc = chrome.runtime.getURL('node_modules/layout-shift-normalization/dist/layout-shift-normalization.es5.min.js');
   const lsn = await import(lsnSrc);
-  console.log(lsn);
   let overlayClosedForSession = false;
   let latestCLS = {};
 
@@ -196,7 +195,7 @@
  * the wait timeout.
  */
   let debouncedCLSBroadcast = () => {};
-  if (_ !== undefined) {
+  if (typeof _ !== 'undefined') {
     debouncedCLSBroadcast = _.debounce(broadcastCLS, DEBOUNCE_DELAY, {
       leading: true,
       trailing: true,
@@ -226,11 +225,9 @@
     webVitals.getFID((metric) => {
       broadcastMetricsUpdates('fid', metric);
     }, true);
-
-    broadcastMetricsUpdates('eCls', {
-      value: 0.123,
-      isFinal: false,
-    });
+    webVitals.getELS((metric) => {
+      broadcastMetricsUpdates('eCls', metric);
+    }, true);
   }
 
   /**
