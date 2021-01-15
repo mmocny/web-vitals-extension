@@ -26,8 +26,7 @@
   ],
   "web_accessible_resources": [
     "src/browser_action/viewer.css",
-    "/node_modules/web-vitals/dist/web-vitals.es5.min.js",
-    "/node_modules/layout-shift-normalization/dist/layout-shift-normalization.es5.min.js"
+    "/node_modules/web-vitals/dist/web-vitals.js"
   ],
   "content_scripts": [
     {

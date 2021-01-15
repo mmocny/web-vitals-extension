@@ -12,7 +12,7 @@
 */
 
 (async () => {
-  const src = chrome.runtime.getURL('node_modules/web-vitals/dist/web-vitals.es5.min.js');
+  const src = chrome.runtime.getURL('node_modules/web-vitals/dist/web-vitals.js');
   const webVitals = await import(src);
   let overlayClosedForSession = false;
   let latestCLS = {};
@@ -31,7 +31,6 @@
     return {
       [name]: {
         value: 0,
-        final: false,
         pass: true,
       }
     }
@@ -40,7 +39,11 @@
     ...mkBadge('lcp'),
     ...mkBadge('cls'),
     ...mkBadge('fid'),
-    ...mkBadge('els'),
+    ...mkBadge('lsn-avg-session-gap5s'),
+    ...mkBadge('lsn-max-session-gap1s'),
+    ...mkBadge('lsn-max-session-gap1s-limit5s'),
+    ...mkBadge('lsn-max-sliding1s'),
+    ...mkBadge('lsn-max-sliding-300ms'),
   };
 
   /**
@@ -170,7 +173,6 @@
       console.log('[Web Vitals]', body.name, body.value.toFixed(2), body);
     }
     badgeMetrics[metricName].value = body.value;
-    badgeMetrics[metricName].final = body.isFinal;
     badgeMetrics.location = getURL();
     badgeMetrics.timestamp = getTimestamp();
     const passes = scoreBadgeMetrics(badgeMetrics);
@@ -228,8 +230,12 @@
     webVitals.getFID((metric) => {
       broadcastMetricsUpdates('fid', metric);
     }, true);
-    webVitals.getELS((metric) => {
-      broadcastMetricsUpdates('els', metric);
+    webVitals.getLSN((metrics) => {
+      broadcastMetricsUpdates('lsn-avg-session-gap5s', metrics['LSN-avg-session-gap5s']);
+      broadcastMetricsUpdates('lsn-max-session-gap1s', metrics['LSN-max-session-gap1s']);
+      broadcastMetricsUpdates('lsn-max-session-gap1s-limit5s', metrics['LSN-max-session-gap1s-limit5s']);
+      broadcastMetricsUpdates('lsn-max-sliding1s', metrics['LSN-max-sliding1s']);
+      broadcastMetricsUpdates('lsn-max-sliding-300ms', metrics['LSN-max-sliding-300ms']);
     }, true);
   }
 
@@ -253,8 +259,7 @@
           <div class="lh-metric__innerwrap">
             <div>
               <span class="lh-metric__title">
-                Largest Contentful Paint${' '}
-                  <span class="lh-metric-state">${metrics.lcp.final ? '' : '(might change)'}</span></span>
+                Largest Contentful Paint</span>
                   ${tabLoadedInBackground ? '<span class="lh-metric__subtitle">Value inflated as tab was loaded in background</span>' : ''}
             </div>
             <div class="lh-metric__value">${(metrics.lcp.value/1000).toFixed(2)}&nbsp;s</div>
@@ -263,16 +268,14 @@
         <div class="lh-metric lh-metric--${metrics.fid.pass ? 'pass':'fail'}">
           <div class="lh-metric__innerwrap">
             <span class="lh-metric__title">
-              First Input Delay${' '}
-                <span class="lh-metric-state">${metrics.fid.final ? '' : '(waiting for input)'}</span></span>
-            <div class="lh-metric__value">${metrics.fid.final ? `${metrics.fid.value.toFixed(2)}&nbsp;ms` : ''}</div>
+              First Input Delay</span>
+            <div class="lh-metric__value">${metrics.fid.value.toFixed(2)}&nbsp;ms</div>
           </div>
         </div>
         <div class="lh-metric lh-metric--${metrics.cls.pass ? 'pass':'fail'}">
           <div class="lh-metric__innerwrap">
             <span class="lh-metric__title">
-              Cumulative Layout Shift${' '}
-                <span class="lh-metric-state">${metrics.cls.final ? '' : '(might change)'}</span></span>
+              Cumulative Layout Shift</span>
             <div class="lh-metric__value">${metrics.cls.value.toFixed(3)}&nbsp;</div>
           </div>
         </div>

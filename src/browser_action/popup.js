@@ -113,7 +113,7 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
         <div class="lh-metric lh-metric--${metrics.lcp.pass ? 'pass':'fail'}">
           <div class="lh-metric__innerwrap">
             <div>
-              <span class="lh-metric__title">Largest Contentful Paint <span class="lh-metric-state">${metrics.lcp.final ? '' : '(might change)'}</span></span>
+              <span class="lh-metric__title">Largest Contentful Paint</span>
               ${tabLoadedInBackground ? '<span class="lh-metric__subtitle">Value inflated as tab was loaded in background</span>' : ''}
             </div>
             <div class="lh-metric__value">${(metrics.lcp.value/1000).toFixed(2)}&nbsp;s</div>
@@ -121,13 +121,13 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
         </div>
         <div class="lh-metric lh-metric--${metrics.fid.pass ? 'pass':'fail'}">
           <div class="lh-metric__innerwrap">
-            <span class="lh-metric__title">First Input Delay <span class="lh-metric-state">${metrics.fid.final ? '' : '(waiting for input)'}</span></span>
-            <div class="lh-metric__value">${metrics.fid.final ? `${metrics.fid.value.toFixed(2)}&nbsp;ms` : ''}</div>
+            <span class="lh-metric__title">First Input Delay</span>
+            <div class="lh-metric__value">${`${metrics.fid.value.toFixed(2)}&nbsp;ms`}</div>
           </div>
         </div>
         <div class="lh-metric lh-metric--${metrics.cls.pass ? 'pass':'fail'}">
           <div class="lh-metric__innerwrap">
-            <span class="lh-metric__title">Cumulative Layout Shift <span class="lh-metric-state">${metrics.cls.final ? '' : '(might change)'}</span></span>
+            <span class="lh-metric__title">Cumulative Layout Shift</span>
             <div class="lh-metric__value">${metrics.cls.value.toFixed(3)}&nbsp;</div>
           </div>
         </div>
@@ -136,19 +136,17 @@ function buildLocalMetricsTemplate(metrics, tabLoadedInBackground) {
     <div class="lh-audit-group__header"><span class="lh-audit-group__title">Experimental Metrics</span></div>`;
 
   for (const [name, metric] of Object.entries(metrics)) {
-    if (!name.startsWith('els')) continue;
-    for (const [elsStrategy, data] of Object.entries(metric.value)) {
-      html += `<div class="lh-columns">
-          <div class="lh-column">
-            <div class="lh-metric lh-metric--${data.pass ? 'pass':'fail'}">
-              <div class="lh-metric__innerwrap">
-                <span class="lh-metric__title">${elsStrategy}<span class="lh-metric-state">${metric.final ? '' : '(might change)'}</span></span>
-                <div class="lh-metric__value">${data.value.toFixed(3)}&nbsp;</div>
-              </div>
+    if (!name.startsWith('lsn')) continue;
+    html += `<div class="lh-columns">
+        <div class="lh-column">
+          <div class="lh-metric lh-metric--average">
+            <div class="lh-metric__innerwrap">
+              <span class="lh-metric__title">${name}</span>
+              <div class="lh-metric__value">${metric.value.toFixed(3)}&nbsp;</div>
             </div>
           </div>
-        </div>`
-    }
+        </div>
+      </div>`
   }
   html += `</div>
   <div class="lh-metrics-final lh-metrics__disclaimer" hidden>
