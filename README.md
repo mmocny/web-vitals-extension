@@ -1,49 +1,22 @@
-# Web Vitals Chrome Extension (alpha)
-*A Chrome extension to measure metrics for a healthy site* 
-[Install now](https://chrome.google.com/webstore/detail/web-vitals/ahfhijdlegdabablpippeagghigmibma)
+# Experimental Fork of Web Vitals Chrome Extension (alpha)
+*A Chrome extension to measure [experimental Layout Shift variants](https://github.com/mmocny/web-vitals/tree/lsn) of Web Vitals metrics* 
+
+This project is a temporary fork of [GoogleChrome/web-vitals-extension](https://github.com/GoogleChrome/web-vitals-extension).  You should look there first unless specifically testing the experimental Normalized Layout Shift metric values.
 
 <img src="media/cwv-extension-screenshot.png">
 
-This extension measures the three [Core Web Vitals](https://web.dev/vitals) metrics in a way that matches how they're measured by Chrome and reported to other Google tools (e.g. [Chrome User Experience Report](https://developers.google.com/web/tools/chrome-user-experience-report), [Page Speed Insights](https://developers.google.com/speed/pagespeed/insights/), [Search Console](https://search.google.com/search-console/about)).
-
-It supports all of the [Core Web Vitals](https://web.dev/vitals/#core-web-vitals) and leverages the [web-vitals](https://github.com/GoogleChrome/web-vitals) library under the hood to capture:
-
-* [Largest Contentful Paint](https://web.dev/lcp)
-* [Cumulative Layout Shift](https://web.dev/cls)
-* [First Input Delay](https://web.dev/fid)
-
 <h3 id="install">Installation Instructions</h3>
-
-The Web Vitals Chrome Extenstion can be installed from the [Chrome Web Store](https://chrome.google.com/webstore/detail/web-vitals/ahfhijdlegdabablpippeagghigmibma).
-
-If you are looking for a more bleeding-edge build, you can also install the version of the extension from master.
 
 <h4 id="install-master">Install from master</h4>
 
 **Google Chrome**
-1. Download this repo as a [ZIP file from GitHub](https://github.com/googlechrome/web-vitals-extension/archive/master.zip).
-1. Unzip the file and you should have a folder named `web-vitals-extension-master`.
+1. Download this repo as a [ZIP file from GitHub](https://github.com/mmocny/web-vitals-extension/archive/experimental-ls.zip).
+1. Unzip the file and you should have a folder named `web-vitals-extension-experimental-ls`.
 1. In Chrome go to the extensions page (`chrome://extensions`).
 1. Enable Developer Mode.
-1. Drag the `web-vitals-extension-master` folder anywhere on the page to import it (do not delete the folder afterwards).
+1. Drag the `web-vitals-extension-experimental-ls` folder anywhere on the page to import it (do not delete the folder afterwards).
 
 ## Usage
-
-### Ambient badge
-
-<img src="media/cwv-extension-badge.png" width="75%">
-
-The Ambient Badge helps check if a page passing the Core Web Vitals thresholds.
-
-Once installed, the extension will display a disabled state badge icon until you navigate to a URL. At this point it will update the badge to green or red depending on whether the URL passes the Core Web Vitals metrics thresholds.
-
-The badge has a number of states:
-
-* Disabled - gray
-* Passing - green
-* One or more metrics failing - red
-
-If one or more metrics are failing, the badge will animate the values of these metrics.
 
 ### Detailed drill-down
 

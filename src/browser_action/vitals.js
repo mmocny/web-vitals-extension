@@ -246,44 +246,62 @@
  * @return {String} a populated template of metrics
  */
   function buildOverlayTemplate(metrics, tabLoadedInBackground) {
-    return `
-    <div id="lh-overlay-container" class="lh-unset lh-root lh-vars dark" style="display: block;">
-    <div class="lh-overlay">
-    <div class="lh-audit-group lh-audit-group--metrics">
-    <div class="lh-audit-group__header">
-      <span class="lh-audit-group__title">Metrics</span>
-    </div>
-    <div class="lh-columns">
-      <div class="lh-column">
-        <div class="lh-metric lh-metric--${metrics.lcp.pass ? 'pass':'fail'}">
-          <div class="lh-metric__innerwrap">
-            <div>
-              <span class="lh-metric__title">
-                Largest Contentful Paint</span>
-                  ${tabLoadedInBackground ? '<span class="lh-metric__subtitle">Value inflated as tab was loaded in background</span>' : ''}
+    let html = `
+      <div id="lh-overlay-container" class="lh-unset lh-root lh-vars dark" style="display: block;">
+      <div class="lh-overlay">
+      <div class="lh-audit-group lh-audit-group--metrics">
+      <div class="lh-audit-group__header">
+        <span class="lh-audit-group__title">Metrics</span>
+      </div>
+      <div class="lh-columns">
+        <div class="lh-column">
+          <div class="lh-metric lh-metric--${metrics.lcp.pass ? 'pass':'fail'}">
+            <div class="lh-metric__innerwrap">
+              <div>
+                <span class="lh-metric__title">
+                  Largest Contentful Paint</span>
+                    ${tabLoadedInBackground ? '<span class="lh-metric__subtitle">Value inflated as tab was loaded in background</span>' : ''}
+              </div>
+              <div class="lh-metric__value">${(metrics.lcp.value/1000).toFixed(2)}&nbsp;s</div>
             </div>
-            <div class="lh-metric__value">${(metrics.lcp.value/1000).toFixed(2)}&nbsp;s</div>
           </div>
-        </div>
-        <div class="lh-metric lh-metric--${metrics.fid.pass ? 'pass':'fail'}">
-          <div class="lh-metric__innerwrap">
-            <span class="lh-metric__title">
-              First Input Delay</span>
-            <div class="lh-metric__value">${metrics.fid.value.toFixed(2)}&nbsp;ms</div>
+          <div class="lh-metric lh-metric--${metrics.fid.pass ? 'pass':'fail'}">
+            <div class="lh-metric__innerwrap">
+              <span class="lh-metric__title">
+                First Input Delay</span>
+              <div class="lh-metric__value">${metrics.fid.value.toFixed(2)}&nbsp;ms</div>
+            </div>
           </div>
-        </div>
-        <div class="lh-metric lh-metric--${metrics.cls.pass ? 'pass':'fail'}">
-          <div class="lh-metric__innerwrap">
-            <span class="lh-metric__title">
-              Cumulative Layout Shift</span>
-            <div class="lh-metric__value">${metrics.cls.value.toFixed(3)}&nbsp;</div>
+          <div class="lh-metric lh-metric--${metrics.cls.pass ? 'pass':'fail'}">
+            <div class="lh-metric__innerwrap">
+              <span class="lh-metric__title">
+                Cumulative Layout Shift</span>
+              <div class="lh-metric__value">${metrics.cls.value.toFixed(3)}&nbsp;</div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="lh-audit-group__header"><span class="lh-audit-group__title">Experimental Metrics</span></div>`;
+
+      for (const [name, metric] of Object.entries(metrics)) {
+        if (!name.startsWith('lsn')) continue;
+        html += `<div class="lh-columns">
+            <div class="lh-column">
+              <div class="lh-metric lh-metric--average">
+                <div class="lh-metric__innerwrap">
+                  <span class="lh-metric__title">${name}</span>
+                  <div class="lh-metric__value">${metric.value.toFixed(3)}&nbsp;</div>
+                </div>
+              </div>
+            </div>
+          </div>`
+      }
+
+      html += `</div>
     </div>
-  </div>
-  </div>
-  </div>`;
+    </div>
+    </div>`;
+    return html;
   }
 
   fetchWebPerfMetrics();
